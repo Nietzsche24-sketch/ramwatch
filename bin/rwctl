@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# rwctl status|log|set <MB> [interval]
+case "$1" in
+  status)    launchctl print gui/$(id -u)/com.tachyon.ramwatch ;;
+  log)       tail -n 60 ~/.atlas/ramwatch/logs/ram.log ;;
+  set)       printf 'HARD_FLOOR_MB=%s\nCHECK_INTERVAL=%s\n' "${2:-4096}" "${3:-20}" > ~/.atlas/ramwatch/config.sh
+             launchctl kickstart -k gui/$(id -u)/com.tachyon.ramwatch ;;
+  *) echo "usage: rwctl {status|log|set <MB> [interval]}"; exit 1 ;;
+esac
